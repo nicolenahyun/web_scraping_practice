@@ -1,16 +1,11 @@
 # 라이브러리 호출
 from bs4 import BeautifulSoup
-import requests
-import pandas as pd
 import csv
 from selenium import webdriver
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 # csv 파일 저장 세팅
-filename = "마켓컬리_샐러드간편식.csv"
+filename = "/Users/doukkim/Section_03/web_scraping_practice/Market_Kurly_Scraping/kurly_salad.csv"
 f = open(filename, 'w', encoding="utf-8-sig", newline="")
 writer = csv.writer(f)
 
@@ -24,11 +19,11 @@ options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")     # headless 설정 : 창없는 크롬으로 크롤링하기
 
-browser = webdriver.Chrome('chromedriver', chrome_options=options)
+browser = webdriver.Chrome('/Users/doukkim/Section_03/web_scraping_practice/Market_Kurly_Scraping/chromedriver', options=options)
 
 # 마켓컬리 샐러드간편식 카테고리 상품 페이지 URL
 browser.get("https://www.kurly.com/shop/goods/goods_list.php?category=912")
-time.sleep(2)
+time.sleep(1)
 
 # 웹 스크래이핑
 items = browser.find_elements_by_class_name('item')
@@ -48,7 +43,7 @@ for page in range(len(pages)) :
         items = browser.find_elements_by_class_name('item')
         items[i].click()
         
-        time.sleep(5)
+        time.sleep(1)
         
         req = browser.page_source
         soup = BeautifulSoup(req, 'html.parser')
@@ -103,9 +98,11 @@ for page in range(len(pages)) :
         
         writer.writerow(item)
         
-        time.sleep(5)
+        time.sleep(3)
 
-    time.sleep(2)
+    time.sleep(1)
     pages = browser.find_elements_by_class_name('pagediv>span>a')
     print(pages, len(pages))
     pages[page].click()
+
+browser.quit()
